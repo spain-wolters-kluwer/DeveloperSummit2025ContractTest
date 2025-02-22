@@ -24,7 +24,7 @@ env:
   PactBrokerUserName: ${{ secrets.PACT_BROKER_USER }}
   PactBrokerPassword: ${{ secrets.PACT_BROKER_PWD }}
   UsersPermissionsBranch: ${{ github.ref_name }}
-  UsersPermissionsVersion: ${{ github.sha }}
+  UsersPermissionsAssemblyVersion: ${{ github.sha }}
   UsersPermissionsPipelineUrl: ${{ github.event.pull_request.html_url }}
   UsersPermissionsEnvironmentTag: development
   PactDir: src/DevSummit.UsersPermissions/pacts
