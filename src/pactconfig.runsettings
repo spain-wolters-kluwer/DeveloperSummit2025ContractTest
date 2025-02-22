@@ -11,7 +11,7 @@
 			<UsersPermissionsPipelineUrl>https://mypipelineurl.com</UsersPermissionsPipelineUrl>
 			<UsersPermissionsEnvironmentTag>development</UsersPermissionsEnvironmentTag>
 			<BlogBranch>development</BlogBranch>
-			<BlogAssemblyVersion>1.1.0-rev.2</BlogAssemblyVersion>
+			<BlogAssemblyVersion>1.2.0-rev.2</BlogAssemblyVersion>
 			<BlogPipelineUrl>https://mypipelineurl.com</BlogPipelineUrl>
 			<BlogEnvironmentTag>development</BlogEnvironmentTag>
 			<PactDir>../../../../../../pacts</PactDir>

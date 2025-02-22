@@ -1,14 +1,46 @@
-﻿using DevSummit.Blog.Api.Controllers;
-using DevSummit.Blog.Api.Domain.Entities;
-using DevSummit.Commons.Pact;
-using PactNet;
-using System.Net;
-using System.Text;
-using System.Text.Json;
-using Xunit.Abstractions;
+# Use case Implementation - Blog Service
 
-namespace DevSummit.Blog.Consumer.Tests.BlogApi;
+> “Add **read-only** and **write** roles in blog service.”
 
+## Consumer-driven contract testing
+
+### Test implementation
+First of all we modify the contract and tests.
+
+1. Edit **BlogData** and add the new users
+```csharp
+    private static User[] users = [
+        new User
+        {
+            Id = Guid.Parse("62d7a17a-6273-4863-bc5f-2e096e81e749"),
+            Name = "ReadOnlyUser",
+            Email = "ReadOnlyUser@user.com",
+            Role = UserRoles.ReadOnly
+        },
+        new User
+        {
+
+            Id = Guid.Parse("365d9ed3-eabf-465a-b48a-fdf32110501f"),
+            Name = "FullAccessUser",
+            Email = "FullAccessUser@user.com",
+            Role = UserRoles.FullAccess
+        },
+        new User
+        {
+            Id = Guid.Parse("2a69e26a-d392-41b1-82e6-68b3e4a869fb"),
+            Name = "NotPermitedUser",
+            Email = "NotPermitedUser@user.com",
+            Role = UserRoles.NotPermited              
+        }
+    ];
+```
+And adapt the returning object in the contract definition:
+```csharp
+.WithJsonBody(new { name = Match.Type(user.Name), email = Match.Regex(user.Email, mailRegexPattern), role = user.Role });
+```
+
+2. Add the tests for **FullAccess** and  **ReadOnly** user.
+```csharp
 public class BlogApiTests : IClassFixture<PactService>
 {
     private readonly IPactBuilderV4 _pactBuilder;
@@ -477,4 +509,142 @@ public class BlogApiTests : IClassFixture<PactService>
     }
     #endregion
 }
+```
+3. Implement minimun to compile the solution
+
+So change the **User** entity in blog API.
+```csharp
+public enum UserRoles
+{
+    NotPermited = 0,
+    ReadOnly = 1,
+    FullAccess = 2    
+}
+
+public class User
+{
+    public Guid Id { get; set; }
+    public string? Name { get; set; }
+    public string? Email { get; set; }
+    public UserRoles Role { get; set; }
+}
+```
+**HasUser** method in **UserService** class
+```csharp
+    public async Task<bool> HasAccess(string userName)
+    {
+        try
+        {
+            var userId = await usersClient.GetUserIdByName(userName);
+            if (userId == Guid.Empty)
+            {
+                return false;
+            }
+
+            var user = await usersClient.GetUserById(userId);
+            return user.Access;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error while checking access for user {UserName}", userName);
+            return false;
+        }
+    }
+```
+and mappings in **UserClient Class
+```csharp
+
+    public async Task<User> GetUserById(Guid id)
+    {
+        var response = await httpClient.GetAsync($"api/users/{id}");
+        response.EnsureSuccessStatusCode();
+        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+        
+        return new User
+        {
+            Id = id,
+            Name = userDto.Name,
+            Email = userDto.Email,
+            Role = userDto.Role
+        };
+    }
+
+    internal record UserViewDto(Guid Id, string Name, string Email);
+    internal record UserDto(string Name, string Email, UserRoles Role);
+```
+
+### Make the test pass in Blog Service
+1. Modify **HasAccess** method to make the decission based on the operation and the user in **UserService**. 
+```csharp
+public async Task<bool> HasAccess(string userName, string operation)
+    {
+        try
+        {
+            var userId = await usersClient.GetUserIdByName(userName);
+            if (userId == Guid.Empty)
+            {
+                return false;
+            }
+
+            var user = await usersClient.GetUserById(userId);
+
+            if (user.Role == UserRoles.FullAccess)
+            {
+                // Full access has access to all operations
+                return true;
+            }
+
+            if (user.Role == UserRoles.ReadOnly && operation == "Read")
+            {
+                // ReadOnly has access to read operation
+                return true;
+            }
+                                         
+            // Other kind of combination operation and role has no access
+            return false;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error while checking access for user {UserName}", userName);
+            return false;
+        }
+    }
+```
+**Note** change the interface too.
+
+2. Change the **Middleware** to pass the operation parameter.
+```csharp
+ public async Task InvokeAsync(HttpContext context)
+ {
+     if (!context.Request.Headers.ContainsKey("Username"))
+     {
+         context.Response.StatusCode = StatusCodes.Status400BadRequest;
+         await context.Response.WriteAsync("Username header is missing.");
+         return;
+     }
+
+     var username = context.Request.Headers["Username"].ToString();
+
+     string operation = GetOperationFromMethod(context.Request.Method);
+     if (!await _service.HasAccess(username, operation))
+     {
+         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+         await context.Response.WriteAsync("Access denied.");
+         return;
+     }
+
+     await _next(context);
+ }
+
+ private static string GetOperationFromMethod(string method) => method switch
+ {
+     "POST" => "Create",
+     "PUT" => "Update",
+     "DELETE" => "Delete",
+     "GET" => "Read",
+     _ => "Unknown"
+ };
+ ```
+
+
 

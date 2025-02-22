@@ -19,6 +19,7 @@ To follow this hands on you need to be installed:
 3. [Provider Contract Test](./handsOn/03-ProviderContractTest.md)
 4. [Integration With Pact Broker](./handsOn/04-IntegrateWithPactBroker.md)
 5. [Integrate in your CI pipelines](./handsOn/05-IntegrateinCI.md)
+6. [Use case Implementation - Blog Service](./handsOn/06-UseCaseBlogImplementation.md)
 
 # Configuration
 

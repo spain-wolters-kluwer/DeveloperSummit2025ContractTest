@@ -2,5 +2,5 @@
 
 public interface IUsersService
 {
-    public Task<bool> HasAccess(string userName);
+    public Task<bool> HasAccess(string userName, string operation);
 }

@@ -1,4 +1,5 @@
 ﻿using DevSummit.Blog.Api.Domain.Clients;
+using DevSummit.Blog.Api.Domain.Entities;
 
 namespace DevSummit.Blog.Api.Domain.Services;
 
@@ -14,7 +15,7 @@ public class UsersService : IUsersService
         this.logger = logger;
     }
 
-    public async Task<bool> HasAccess(string userName)
+    public async Task<bool> HasAccess(string userName, string operation)
     {
         try
         {
@@ -25,7 +26,20 @@ public class UsersService : IUsersService
             }
 
             var user = await usersClient.GetUserById(userId);
-            return user.Access;
+            if (user.Role == UserRoles.FullAccess)
+            {
+                // Full access has access to all operations
+                return true;
+            }
+
+            if (user.Role == UserRoles.ReadOnly && operation == "Read")
+            {
+                // ReadOnly has access to read operation
+                return true;
+            }
+
+            // Other kind of combination operation and role has no access
+            return false;
         }
         catch (Exception ex)
         {

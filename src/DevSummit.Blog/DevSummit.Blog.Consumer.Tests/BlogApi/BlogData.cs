@@ -9,17 +9,25 @@ internal static class BlogData
     private static User[] users = [
         new User
         {
-            Id = Guid.Parse("757d4594-79b2-480c-8fc4-ddd7061c18cb"),
-            Name = "PermitedUser",
-            Email = "PermitedUser@user.com",
-            Access = true
+            Id = Guid.Parse("62d7a17a-6273-4863-bc5f-2e096e81e749"),
+            Name = "ReadOnlyUser",
+            Email = "ReadOnlyUser@user.com",
+            Role = UserRoles.ReadOnly
+        },
+        new User
+        {
+
+            Id = Guid.Parse("365d9ed3-eabf-465a-b48a-fdf32110501f"),
+            Name = "FullAccessUser",
+            Email = "FullAccessUser@user.com",
+            Role = UserRoles.FullAccess
         },
         new User
         {
             Id = Guid.Parse("2a69e26a-d392-41b1-82e6-68b3e4a869fb"),
             Name = "NotPermitedUser",
             Email = "NotPermitedUser@user.com",
-            Access = false
+            Role = UserRoles.NotPermited
         }
     ];
 
@@ -57,7 +65,7 @@ internal static class BlogData
                     .WithRequest(HttpMethod.Get, $"/api/users/{user.Id}")
                 .WillRespond()
                     .WithStatus(HttpStatusCode.OK)
-                    .WithJsonBody(new { name = Match.Type(user.Name), email = Match.Regex(user.Email, mailRegexPattern), hasAccess = user.Access });
+                    .WithJsonBody(new { name = Match.Type(user.Name), email = Match.Regex(user.Email, mailRegexPattern), role = user.Role });
         }
     }
 }

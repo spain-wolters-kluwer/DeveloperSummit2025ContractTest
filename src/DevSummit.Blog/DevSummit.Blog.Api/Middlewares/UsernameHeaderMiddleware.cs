@@ -22,7 +22,8 @@ public class UsernameHeaderMiddleware
         }
 
         var username = context.Request.Headers["Username"].ToString();
-        if (!await _service.HasAccess(username))
+        var operation = GetOperationFromMethod(context.Request.Method);
+        if (!await _service.HasAccess(username, operation))
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsync("Access denied.");
@@ -31,4 +32,13 @@ public class UsernameHeaderMiddleware
 
         await _next(context);
     }
+
+    private static string GetOperationFromMethod(string method) => method switch
+    {
+        "POST" => "Create",
+        "PUT" => "Update",
+        "DELETE" => "Delete",
+        "GET" => "Read",
+        _ => "Unknown"
+    };
 }
