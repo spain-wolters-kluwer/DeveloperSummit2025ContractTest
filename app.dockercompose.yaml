@@ -1,0 +1,33 @@
+services:
+  userpermissionsapi:
+    image: wke/devsummit/userpermissionsapi
+    build:
+      context: .
+      dockerfile: ./DockerTools/UsersPermissions.dockerfile
+    ports:
+      - "50000:8080"        
+  weatherforecastapi:
+    image: wke/devsummit/weatherforecastapi
+    build:
+      context: .
+      dockerfile: ./DockerTools/WeatherForecast.dockerfile
+    ports:
+      - "50001:8080"
+    environment:
+      - USERS_PERMISSIONS_API_URL=http://userpermissionsapi:8080  
+    depends_on:
+      - userpermissionsapi
+  blogapi:
+    image: wke/devsummit/blogapi
+    build:
+      context: .
+      dockerfile: ./DockerTools/Blog.dockerfile
+    ports:
+      - "50002:8080"
+    environment:
+      - USERS_PERMISSIONS_API_URL=http://userpermissionsapi:8080
+    depends_on:
+      - userpermissionsapi
+
+
+
