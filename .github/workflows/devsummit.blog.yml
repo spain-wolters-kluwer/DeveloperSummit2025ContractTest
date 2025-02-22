@@ -21,7 +21,7 @@ on:
 env:
   TestResultsPath: src/DevSummit.Blog/TestsResults
   PactBrokerUrl: ${{ secrets.PACT_BROKER_URL }}
-  PactBrokerUser: ${{ secrets.PACT_BROKER_USER }}
+  PactBrokerUserName: ${{ secrets.PACT_BROKER_USER }}
   PactBrokerPassword: ${{ secrets.PACT_BROKER_PWD }}
   BlogBranch: ${{ github.ref_name }}
   BlogAssemblyVersion: ${{ github.sha }}
@@ -42,20 +42,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Run PowerShell script
-      run: |
-        Write-Output "Running PowerShell script..."
-        # Add your PowerShell commands here
-        Write-Output $PactBrokerUrl
-        Write-Output $PactBrokerUser 
-        Write-Output $PactBrokerPassword
-        Write-Output $BlogBranch
-        Write-Output $BlogAssemblyVersion
-        Write-Output $BlogPipelineUrl
-        Write-Output $BlogEnvironmentTag
-        Write-Output $PactDir
 
-      shell: pwsh
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -88,10 +75,12 @@ jobs:
           test-results/**/*.json          
 
     - name: Create code coverage report
+      if: always()
       run: |
         dotnet tool install -g dotnet-reportgenerator-globaltool
         reportgenerator -reports:test-results/**/*.cobertura.xml -targetdir:CodeCoverage -reporttypes:'MarkdownSummaryGithub,Cobertura'
 
     - name: Write to Job Summary
+      if: always()  
       run: cat CodeCoverage/SummaryGithub.md >> $GITHUB_STEP_SUMMARY  
          
