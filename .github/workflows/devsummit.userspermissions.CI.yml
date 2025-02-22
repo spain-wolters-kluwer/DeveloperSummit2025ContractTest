@@ -9,14 +9,14 @@ on:
       - main
       - development
       - feature/*
-#    paths:
-#      - 'src/DevSummit.UsersPermissions/**'
+    paths:
+      - 'src/DevSummit.UsersPermissions/**'
   pull_request:
     branches:
       - main
       - development
     paths:
-      - 'src/DevSummit.Blog/**'
+      - 'src/DevSummit.UsersPermissions/**'
 
 env:
   TestResultsPath: src/DevSummit.Blog/TestsResults
