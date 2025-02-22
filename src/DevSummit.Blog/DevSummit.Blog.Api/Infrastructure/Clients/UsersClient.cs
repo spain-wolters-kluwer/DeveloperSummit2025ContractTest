@@ -29,12 +29,12 @@ public class UsersClient : IUsersClient
         return new User
         {
             Id = id,
-            Name = userDto.Name,
-            Email = userDto.Email,
-            Access = userDto.HasAccess
+            Name = userDto?.Name,
+            Email = userDto?.Email,
+            Access = (Permissions) userDto.HasAccess 
         };
     }
 }
 
 internal record UserViewDto(Guid Id, string Name, string Email);
-internal record UserDto(string Name, string Email, bool HasAccess);
+internal record UserDto(string Name, string Email, int HasAccess);

@@ -12,6 +12,10 @@ To follow this hands on you need to be installed:
 - **Source Code Editor** as Visual Studio 2022(preferred) or Visual Studio Code (with c# plugins). Raider from JetBrains are allowed as well. 
 - **Docker** such as Docker desktop or Rancher.
 
+# Hands On
+
+1. [Use Case Bad Implementation](./handsOn/01-UseCaseBadImplementation.md)
+
 # Configuration
 
 It is needed to configure the environment variable **USERS_PERMISSIONS_API_URL** with the *Users Permissions URL* before executing the projects **DevSummit.WeatherForecast** and **DevSummit.Blog**.

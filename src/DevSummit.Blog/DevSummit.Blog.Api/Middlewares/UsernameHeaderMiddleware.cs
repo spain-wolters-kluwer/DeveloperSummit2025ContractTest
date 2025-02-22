@@ -22,7 +22,7 @@ public class UsernameHeaderMiddleware
         }
 
         var username = context.Request.Headers["Username"].ToString();
-        if (!await _service.HasAccess(username))
+        if (!await _service.HasAccess(username, context.Request.Method.ToLowerInvariant()))
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsync("Access denied.");
