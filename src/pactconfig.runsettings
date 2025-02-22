@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+    <RunConfiguration>
+        <EnvironmentVariables>
+			<WeatherForecastBranch>development</WeatherForecastBranch>
+			<WeatherForecastAssemblyVersion>3.0.0-rev.5</WeatherForecastAssemblyVersion>
+			<WeatherForecastPipelineUrl>https://mypipelineurl.com</WeatherForecastPipelineUrl>
+		    <WeatherForecastEnvironmentTag>development</WeatherForecastEnvironmentTag>
+			<UsersPermissionsBranch>development</UsersPermissionsBranch>
+			<UsersPermissionsAssemblyVersion>2.2.0-rev.9</UsersPermissionsAssemblyVersion>
+			<UsersPermissionsPipelineUrl>https://mypipelineurl.com</UsersPermissionsPipelineUrl>
+			<UsersPermissionsEnvironmentTag>development</UsersPermissionsEnvironmentTag>
+			<BlogBranch>development</BlogBranch>
+			<BlogAssemblyVersion>1.1.0-rev.2</BlogAssemblyVersion>
+			<BlogPipelineUrl>https://mypipelineurl.com</BlogPipelineUrl>
+			<BlogEnvironmentTag>development</BlogEnvironmentTag>
+			<PactDir>../../../../../../pacts</PactDir>
+			<PactBrokerUrl>http://localhost:9292/</PactBrokerUrl>
+			<PactBrokerUser></PactBrokerUser>
+			<PactBrokerPassword></PactBrokerPassword>
+		</EnvironmentVariables>
+    </RunConfiguration>
+</RunSettings>

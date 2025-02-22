@@ -1,6 +1,7 @@
 ﻿using DevSummit.UsersPermissions.Api;
 using DevSummit.UsersPermissions.Provider.Tests.Middleware;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 
 namespace DevSummit.UsersPermissions.Provider.Tests;
 
@@ -10,9 +11,14 @@ public class TestServerFixture : IDisposable
     public WebApplication App => _app;
     private const string url = "http://localhost:9223";
     public string Url => url;
+    public IConfiguration Configuration { get; private set; }
 
     public TestServerFixture()
     {
+        Configuration = new ConfigurationBuilder().
+            AddEnvironmentVariables().
+            Build();
+
         var builder = WebApplication.CreateBuilder();
 
         HostConfiguration.ConfigureBuilder(builder);

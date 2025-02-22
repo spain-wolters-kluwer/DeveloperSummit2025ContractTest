@@ -17,6 +17,7 @@ To follow this hands on you need to be installed:
 1. [Use Case Bad Implementation](./handsOn/01-UseCaseBadImplementation.md)
 2. [Consumer Contract Test](./handsOn/02-ConsumerContractTest.md)
 3. [Provider Contract Test](./handsOn/03-ProviderContractTest.md)
+4. [Integration With Pact Broker](./handsOn/04-IntegrateWithPactBroker.md)
 
 # Configuration
 
@@ -39,6 +40,15 @@ Afterward you can access to the swagger of the API's:
 * [Users Permissions API] (http://localhost:50000/swagger/index.html)
 * [Weather Forecast API] (http://localhost:50001/swagger/index.html)
 * [Blog API] (http://localhost:50002/swagger/index.html)
+
+## Execute PactBroker
+To execute the PactBroker in a docker compose.
+
+```shell
+docker compose -f ./DockerTools/PactBroker-Docker-Compose.yml up -d
+```
+
+Pact broker is hosted in (http://localhost:9292)
 
 
 
