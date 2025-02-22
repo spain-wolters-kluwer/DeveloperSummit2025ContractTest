@@ -16,6 +16,7 @@ To follow this hands on you need to be installed:
 
 1. [Use Case Bad Implementation](./handsOn/01-UseCaseBadImplementation.md)
 2. [Consumer Contract Test](./handsOn/02-ConsumerContractTest.md)
+3. [Provider Contract Test](./handsOn/03-ProviderContractTest.md)
 
 # Configuration
 
