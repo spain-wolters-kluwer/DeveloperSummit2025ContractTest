@@ -19,7 +19,7 @@ on:
       - 'src/DevSummit.Blog/**'
 
 env:
-  Testresultspaths: src/DevSummit.Blog/TestsResults
+  TestResultsPath: src/DevSummit.Blog/TestsResults
   PactBrokerUrl: ${{ secrets.PACT_BROKER_URL }}
   PactBrokerUser: ${{ secrets.PACT_BROKER_USER }}
   PactBrokerPassword: ${{ secrets.PACT_BROKER_PWD }}
@@ -66,9 +66,9 @@ jobs:
 
     - name: Build
       run: dotnet build  src/DevSummit.Blog/DevSummit.Blog.Consumer.Tests/DevSummit.Blog.Consumer.Tests.csproj --configuration Release --no-restore
-      
+
     - name: Test
-      run: dotnet test src/DevSummit.Blog/DevSummit.Blog.Consumer.Tests/DevSummit.Blog.Consumer.Tests.csproj --configuration Release --no-restore --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+      run: dotnet test src/DevSummit.Blog/DevSummit.Blog.Consumer.Tests/DevSummit.Blog.Consumer.Tests.csproj --configuration Release --no-restore --no-build --verbosity normal --results-directory $TestResultsPath --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
 
     - name: Copy Test Results
       if: always()
@@ -90,7 +90,7 @@ jobs:
     - name: Create code coverage report
       run: |
         dotnet tool install -g dotnet-reportgenerator-globaltool
-        reportgenerator -reports:test-results/*.cobertura.xml -targetdir:CodeCoverage -reporttypes:'MarkdownSummaryGithub,Cobertura'
+        reportgenerator -reports:test-results/**/*.cobertura.xml -targetdir:CodeCoverage -reporttypes:'MarkdownSummaryGithub,Cobertura'
 
     - name: Write to Job Summary
       run: cat CodeCoverage/SummaryGithub.md >> $GITHUB_STEP_SUMMARY  
