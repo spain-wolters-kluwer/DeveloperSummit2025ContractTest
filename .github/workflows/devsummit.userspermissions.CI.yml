@@ -52,10 +52,10 @@ jobs:
       run: dotnet restore src/DevSummit.sln
 
     - name: Build
-      run: dotnet build  src/DevSummit.UsersPermissions/DevSummit.UsersPermissions.Consumer.Tests/DevSummit.UsersPermissions.Consumer.Tests.csproj --configuration Release --no-restore
+      run: dotnet build  src/DevSummit.UsersPermissions/DevSummit.UsersPermissions.Consumer.Tests/DevSummit.UsersPermissions.Provider.Tests.csproj --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test src/DevSummit.UsersPermissions/DevSummit.UsersPermissions.Consumer.Tests/DevSummit.UsersPermissions.Consumer.Tests.csproj --configuration Release --no-restore --no-build --verbosity normal --results-directory $TestResultsPath --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+      run: dotnet test src/DevSummit.UsersPermissions/DevSummit.UsersPermissions.Consumer.Tests/DevSummit.UsersPermissions.Provider.Tests.csproj --configuration Release --no-restore --no-build --verbosity normal --results-directory $TestResultsPath --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
 
     - name: Copy Test Results
       if: always()
