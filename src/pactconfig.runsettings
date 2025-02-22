@@ -7,7 +7,7 @@
 			<WeatherForecastPipelineUrl>https://mypipelineurl.com</WeatherForecastPipelineUrl>
 		    <WeatherForecastEnvironmentTag>development</WeatherForecastEnvironmentTag>
 			<UsersPermissionsBranch>development</UsersPermissionsBranch>
-			<UsersPermissionsAssemblyVersion>2.2.0-rev.9</UsersPermissionsAssemblyVersion>
+			<UsersPermissionsAssemblyVersion>2.3.0-rev.1</UsersPermissionsAssemblyVersion>
 			<UsersPermissionsPipelineUrl>https://mypipelineurl.com</UsersPermissionsPipelineUrl>
 			<UsersPermissionsEnvironmentTag>development</UsersPermissionsEnvironmentTag>
 			<BlogBranch>development</BlogBranch>

@@ -40,7 +40,7 @@ public class UsersController : ControllerBase
             logger.LogError("User not found");
             return NotFound();
         }
-        return new UserDto(user.Name, user.Email, user.HasAccess);
+        return new UserDto(user.Name, user.Email, (int)user.Role);
     }
 
     // POST api/<UsersController>
@@ -48,7 +48,7 @@ public class UsersController : ControllerBase
     public ActionResult<string> Post([FromBody] UserDto user)
     {
         logger.LogInformation("Adding user");   
-        var result = service.AddUser(new User { Name = user.Name, Email = user.Email, HasAccess = user.HasAccess });
+        var result = service.AddUser(new User { Name = user.Name, Email = user.Email, Role = (UserRoles)user.Role });
         if (!result.IsValid)
         {
             logger.LogError(result.Message);
@@ -62,7 +62,7 @@ public class UsersController : ControllerBase
     public ActionResult<string> Put(string id, [FromBody] UserDto user)
     {
         logger.LogInformation("Updating user");
-        var result = service.UpdateUser(new User { Id = Guid.Parse(id), Name = user.Name, Email = user.Email, HasAccess = user.HasAccess });
+        var result = service.UpdateUser(new User { Id = Guid.Parse(id), Name = user.Name, Email = user.Email, Role = (UserRoles)user.Role });
         if (!result.IsValid)
         {
             logger.LogError(result.Message);    
@@ -89,4 +89,4 @@ public class UsersController : ControllerBase
 }
 
 public record UserViewDto(Guid Id, string Name, string Email);
-public record UserDto(string Name, string Email, bool HasAccess);
+public record UserDto(string Name, string Email, int Role);

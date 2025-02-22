@@ -15,14 +15,21 @@ public class UsersRepository : IUsersRepository
                 Id = Guid.Parse("cba1b9da-7664-4022-9267-1de95f456865"),
                 Name = "John Doe",
                 Email = "John.Doe@email.com",
-                HasAccess = true,
+                Role = UserRoles.FullAccess
             },
             new User
             {
                 Id = Guid.Parse("ebf28d90-3c1e-4e0a-89a3-32e8f84dc703"),
                 Name = "Jane Doe",
                 Email = "Jane.Doe@email.com",
-                HasAccess = false,
+                Role = UserRoles.ReadOnly
+            },
+            new User
+            {
+                Id = Guid.Parse("f1b1b9da-7664-4022-9267-1de95f456865"),
+                Name = "John Smith",
+                Email = "Johm Smith@email.com",
+                Role = UserRoles.NoAccess,
             }
         };
     }   
@@ -61,22 +68,7 @@ public class UsersRepository : IUsersRepository
         if (userToUpdate != null)
         {            
             userToUpdate.Email = user.Email;
-            userToUpdate.HasAccess = user.HasAccess;         
+            userToUpdate.Role = user.Role;         
         }        
-    }
-
-    private ValidationResult ValidateUpdateUser(User user, User userToUpdate)
-    {
-        if (userToUpdate.Name != user.Name)
-        {
-            return new ValidationResult { IsValid = false, Message = "No se puede cambiar el nombre del usuario." };
-        }
-
-        if (string.IsNullOrEmpty(user.Email))
-        {
-            return new ValidationResult { IsValid = false, Message = "El correo electrónico del usuario no puede estar vacío." };
-        }
-
-        return new ValidationResult { IsValid = true };
     }
 }
