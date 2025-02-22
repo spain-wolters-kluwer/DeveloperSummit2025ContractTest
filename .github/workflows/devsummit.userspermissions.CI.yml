@@ -1,32 +1,33 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: CI for WeatherForecast Service
+name: CI for UsersPermissions Service
 
 on:
   push:
     branches: 
       - main
       - development
-    paths:
-      - 'src/DevSummit.WeatherForecast/**'
+      - feature/*
+#    paths:
+#      - 'src/DevSummit.UsersPermissions/**'
   pull_request:
     branches:
       - main
       - development
     paths:
-      - 'src/DevSummit.WeatherForecast/**'
+      - 'src/DevSummit.Blog/**'
 
 env:
   TestResultsPath: src/DevSummit.Blog/TestsResults
   PactBrokerUrl: ${{ secrets.PACT_BROKER_URL }}
   PactBrokerUserName: ${{ secrets.PACT_BROKER_USER }}
   PactBrokerPassword: ${{ secrets.PACT_BROKER_PWD }}
-  WeatherForecastBranch: ${{ github.ref_name }}
-  WeatherForecastAssemblyVersion: ${{ github.sha }}
-  WeatherForecastPipelineUrl: ${{ github.event.pull_request.html_url }}
-  WeatherForecastEnvironmentTag: development
-  PactDir: src/DevSummit.Blog/pacts
+  UsersPermissionsBranch: ${{ github.ref_name }}
+  UsersPermissionsVersion: ${{ github.sha }}
+  UsersPermissionsPipelineUrl: ${{ github.event.pull_request.html_url }}
+  UsersPermissionsEnvironmentTag: development
+  PactDir: src/DevSummit.UsersPermissions/pacts
 
 permissions:
   contents: read
@@ -51,10 +52,10 @@ jobs:
       run: dotnet restore src/DevSummit.sln
 
     - name: Build
-      run: dotnet build  src/DevSummit.WeatherForecast/DevSummit.WeatherForecast.Consumer.Tests/DevSummit.WeatherForecast.Consumer.Tests.csproj --configuration Release --no-restore
+      run: dotnet build  src/DevSummit.UsersPermissions/DevSummit.UsersPermissions.Consumer.Tests/DevSummit.UsersPermissions.Consumer.Tests.csproj --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test src/DevSummit.WeatherForecast/DevSummit.WeatherForecast.Consumer.Tests/DevSummit.WeatherForecast.Consumer.Tests.csproj --configuration Release --no-restore --no-build --verbosity normal --results-directory $TestResultsPath --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+      run: dotnet test src/DevSummit.UsersPermissions/DevSummit.UsersPermissions.Consumer.Tests/DevSummit.UsersPermissions.Consumer.Tests.csproj --configuration Release --no-restore --no-build --verbosity normal --results-directory $TestResultsPath --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
 
     - name: Copy Test Results
       if: always()
