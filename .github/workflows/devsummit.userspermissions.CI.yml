@@ -1,0 +1,86 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: CI for UsersPermissions Service
+
+on:
+  push:
+    branches: 
+      - main
+      - development
+      - feature/*
+    paths:
+      - 'src/DevSummit.UsersPermissions/**'
+  pull_request:
+    branches:
+      - main
+      - development
+    paths:
+      - 'src/DevSummit.UsersPermissions/**'
+
+env:
+  TestResultsPath: src/DevSummit.Blog/TestsResults
+  PactBrokerUrl: ${{ secrets.PACT_BROKER_URL }}
+  PactBrokerUserName: ${{ secrets.PACT_BROKER_USER }}
+  PactBrokerPassword: ${{ secrets.PACT_BROKER_PWD }}
+  UsersPermissionsBranch: ${{ github.ref_name }}
+  UsersPermissionsAssemblyVersion: ${{ github.sha }}
+  UsersPermissionsPipelineUrl: ${{ github.event.pull_request.html_url }}
+  UsersPermissionsEnvironmentTag: development
+  PactDir: src/DevSummit.UsersPermissions/pacts
+
+permissions:
+  contents: read
+  issues: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore src/DevSummit.sln
+
+    - name: Build
+      run: dotnet build  src/DevSummit.UsersPermissions/DevSummit.UsersPermissions.Provider.Tests/DevSummit.UsersPermissions.Provider.Tests.csproj --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test src/DevSummit.UsersPermissions/DevSummit.UsersPermissions.Provider.Tests/DevSummit.UsersPermissions.Provider.Tests.csproj --configuration Release --no-restore --no-build --verbosity normal --results-directory $TestResultsPath --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+
+    - name: Copy Test Results
+      if: always()
+      run: |
+        cp -Lpr $TestResultsPath test-results
+
+        echo copied
+        ls test-results
+      shell: bash
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action/linux@v2
+      if: always()
+      with:
+        files: |                    
+          test-results/**/*.trx
+          test-results/**/*.json          
+
+    - name: Create code coverage report
+      if: always()
+      run: |
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+        reportgenerator -reports:test-results/**/*.cobertura.xml -targetdir:CodeCoverage -reporttypes:'MarkdownSummaryGithub,Cobertura'
+
+    - name: Write to Job Summary
+      if: always()  
+      run: cat CodeCoverage/SummaryGithub.md >> $GITHUB_STEP_SUMMARY  
+         

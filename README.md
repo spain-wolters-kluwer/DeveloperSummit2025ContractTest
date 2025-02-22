@@ -12,12 +12,13 @@ To follow this hands on you need to be installed:
 - **Source Code Editor** as Visual Studio 2022(preferred) or Visual Studio Code (with c# plugins). Raider from JetBrains are allowed as well. 
 - **Docker** such as Docker desktop or Rancher.
 
-# Course
+# Hands On Documentation
 
 1. [Use Case Bad Implementation](./handsOn/01-UseCaseBadImplementation.md)
 2. [Consumer Contract Test](./handsOn/02-ConsumerContractTest.md)
 3. [Provider Contract Test](./handsOn/03-ProviderContractTest.md)
 4. [Integration With Pact Broker](./handsOn/04-IntegrateWithPactBroker.md)
+5. [Integrate in your CI pipelines](./handsOn/05-IntegrateinCI.md)
 
 # Configuration
 

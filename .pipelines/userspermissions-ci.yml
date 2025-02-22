@@ -1,0 +1,74 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - src/DevSummit.UsersPermissions/**
+      
+pool:
+# Agente de Azure
+# name: Azure pipelines
+  vmImage: 'ubuntu-latest'
+
+variables:
+  BuildConfiguration: 'Release'
+  BuildPlatform: 'any cpu'
+  netCoreVersion: 'net8.0'
+  pactDir: './Pacts'
+  prefix: 'userspermissions'
+  projectName: 'DevSummit.UsersPermissions'
+
+stages:
+##################
+##  Stage_Test
+##################
+- stage: 'Stage_Test'
+  jobs:
+  ##################
+  ##  Job_Test
+  ##################
+  - job: Job_Test
+    displayName: 'Job_Test'
+    pool:
+      vmImage: 'ubuntu-latest'
+    variables:
+      - name: UsersPermissionsAssemblyVersion
+        value: $(Build.SourceVersion)
+      - name: UsersPermissionsBranch
+        value: $(Build.SourceBranchName)
+      - name: UsersPermissionsPipelineUrl
+        value: $(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)
+      - name: UsersPermissionsEnvironmentTag
+        value: 'development'
+
+    timeoutInMinutes: 120
+    cancelTimeoutInMinutes: 1
+
+    steps:   
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
+      inputs:
+        command: 'restore'
+        projects: '**/src/$(projectName)/**/**.csproj'
+        sdkVersion: '$(netCoreVersion)'
+        noCache: true
+        verbosityRestore : 'normal'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build'
+      inputs:
+        command: 'build'
+        projects: '**/src/$(projectName)/**/**Tests.csproj'     
+        sdkVersion: '$(netCoreVersion)'   
+        arguments: '--configuration $(BuildConfiguration) --no-restore'      
+
+    - task: DotNetCoreCLI@2
+      displayName: '$(prefix) Consumer Contract test'
+      inputs:
+        command: 'test'
+        projects: '**/src/$(projectName)/**/**Tests.csproj'
+        sdkVersion: '$(netCoreVersion)'
+        arguments: '-c $(BuildConfiguration) --no-build --no-restore --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=opencover'
+        testRunTitle: '$(prefix) Consumer Contract Test'
