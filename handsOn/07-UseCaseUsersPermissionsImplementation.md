@@ -199,3 +199,30 @@ private void InsertUserIfNotExists(User user)
     }
 }
 ```
+
+## Backward compatibility in UsersPermissions Controller
+
+1. Add **HasAccess** field to *UsersDto*
+```csharp
+public record UserDto(string Name, string Email, bool HasAccess, int Role);
+```
+
+2. Update **Get/{id}** operation to fullfill the DTO 
+```csharp
+ // GET api/<UsersController>/5
+ [HttpGet("{id}")]
+ public ActionResult<UserCardDto> GetById(string id)
+ {
+     logger.LogInformation("Getting user by id");
+     var user = repository.GetById(Guid.Parse(id));
+     if (user == null)
+     {
+         logger.LogError("User not found");
+         return NotFound();
+     }
+     return new UserCardDto(user.Name, user.Email, HasAccess(user.Role), (int)user.Role);
+ }
+
+private static bool HasAccess(UserRoles role) => role != UserRoles.NoAccess;
+ ```
+
