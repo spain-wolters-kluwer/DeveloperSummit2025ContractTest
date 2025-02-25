@@ -17,6 +17,9 @@ on:
       - development
     paths:
       - 'src/DevSummit.UsersPermissions/**'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [contract_requiring_verification_publish]
 
 env:
   TestResultsPath: src/DevSummit.Blog/TestsResults
