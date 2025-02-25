@@ -9,8 +9,8 @@ internal static class BlogData
     private static User[] users = [
         new User
         {
-            //Id = Guid.Parse("62d7a17a-6273-4863-bc5f-2e096e81e749"),
-            Id = Guid.Parse("401a5990-afdc-4055-806a-21281601f357"),
+            Id = Guid.Parse("62d7a17a-6273-4863-bc5f-2e096e81e749"),
+            //Id = Guid.Parse("401a5990-afdc-4055-806a-21281601f357"),
             Name = "ReadOnlyUser",
             Email = "ReadOnlyUser@user.com",
             Role = UserRoles.ReadOnly
