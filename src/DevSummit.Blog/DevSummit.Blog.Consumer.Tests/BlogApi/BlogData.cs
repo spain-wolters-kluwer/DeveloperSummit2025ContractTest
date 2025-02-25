@@ -10,7 +10,7 @@ internal static class BlogData
         new User
         {
             //Id = Guid.Parse("62d7a17a-6273-4863-bc5f-2e096e81e749"),
-            Id = Guid.Parse("daade76a-2071-4b8b-9b27-f844bb6f2470"),
+            Id = Guid.Parse("401a5990-afdc-4055-806a-21281601f357"),
             Name = "ReadOnlyUser",
             Email = "ReadOnlyUser@user.com",
             Role = UserRoles.ReadOnly
