@@ -32,10 +32,10 @@ $body = @{
       body= @{
         "event_type"= "contract_requiring_verification_published"
         "client_payload"= @{
-          "pact_url"= "${pactbroker.pactUrl}"
-          "sha"= "${pactbroker.providerVersionNumber}"
-          "branch"= "${pactbroker.providerVersionBranch}"
-          "message"= "Verify changed pact for ${pactbroker.consumerName} version ${pactbroker.consumerVersionNumber} branch ${pactbroker.consumerVersionBranch} by ${pactbroker.providerVersionNumber} (${pactbroker.providerVersionDescriptions})"
+          "pact_url"= '${pactbroker.pactUrl}'
+          "sha"= '${pactbroker.providerVersionNumber}'
+          "branch"= '${pactbroker.providerVersionBranch}'
+          "message"= 'Verify changed pact for ${pactbroker.consumerName} version ${pactbroker.consumerVersionNumber} branch ${pactbroker.consumerVersionBranch} by ${pactbroker.providerVersionNumber} (${pactbroker.providerVersionDescriptions})'
         }
       }
     }
