@@ -8,6 +8,7 @@ on:
     branches: 
       - main
       - development
+      - feature/webhooks
     paths:
       - 'src/DevSummit.Blog/**'
   pull_request:
