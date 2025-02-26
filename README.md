@@ -12,6 +12,17 @@ To follow this hands on you need to be installed:
 - **Source Code Editor** as Visual Studio 2022(preferred) or Visual Studio Code (with c# plugins). Raider from JetBrains are allowed as well. 
 - **Docker** such as Docker desktop or Rancher.
 
+# Hands On Documentation
+
+1. [Use Case Bad Implementation](./handsOn/01-UseCaseBadImplementation.md)
+2. [Consumer Contract Test](./handsOn/02-ConsumerContractTest.md)
+3. [Provider Contract Test](./handsOn/03-ProviderContractTest.md)
+4. [Integration With Pact Broker](./handsOn/04-IntegrateWithPactBroker.md)
+5. [Integrate in your CI pipelines](./handsOn/05-IntegrateinCI.md)
+6. [Use case Implementation - Blog Service](./handsOn/06-UseCaseBlogImplementation.md)
+7. [Use case Implementation - UsersPersmissions Service](./handsOn/07-UseCaseUsersPermissionsImplementation.md)
+8. [Complete CI and CD pipelines](./handsOn/08-CompleteCiCd.md)
+
 # Configuration
 
 It is needed to configure the environment variable **USERS_PERMISSIONS_API_URL** with the *Users Permissions URL* before executing the projects **DevSummit.WeatherForecast** and **DevSummit.Blog**.
@@ -33,6 +44,15 @@ Afterward you can access to the swagger of the API's:
 * [Users Permissions API] (http://localhost:50000/swagger/index.html)
 * [Weather Forecast API] (http://localhost:50001/swagger/index.html)
 * [Blog API] (http://localhost:50002/swagger/index.html)
+
+## Execute PactBroker
+To execute the PactBroker in a docker compose.
+
+```shell
+docker compose -f ./DockerTools/PactBroker-Docker-Compose.yml up -d
+```
+
+Pact broker is hosted in (http://localhost:9292)
 
 
 
