@@ -7,6 +7,8 @@ param (
     [string]$password
 )
 
+Write-Output "Checking if $pacticipant version $version can be deployed to $environment"
+
 $url = "$pactUrl/can-i-deploy?pacticipant=$pacticipant&version=$version&environment=$environment"
 
 $headers = @{

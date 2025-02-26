@@ -58,7 +58,7 @@ jobs:
       run: dotnet test src/DevSummit.Blog/DevSummit.Blog.Consumer.Tests/DevSummit.Blog.Consumer.Tests.csproj --configuration Release --no-restore --no-build --verbosity normal --results-directory $TestResultsPath --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
 
     - name: Check if PR can be completed
-      run: pwsh scripts/canIcompletePR.ps1 ${{ env.PactBrokerUrl }} Blog ${{ env.BlogAssemblyVersion }} ${{ env.BlogEnvironmentTag }} ${{ env.PactBrokerUserName }} ${{ env.PactBrokerPassword }}
+      run: pwsh scripts/canIcompletePR.ps1 ${{ secrets.PACT_BROKER_URL }} Blog ${{ env.BlogAssemblyVersion }} ${{ env.BlogEnvironmentTag }} ${{ secrets.PACT_BROKER_USER }} ${{ secrets.PACT_BROKER_USER }}
       shell: pwsh
       
     - name: Copy Test Results
