@@ -8,7 +8,6 @@ on:
     branches: 
       - main
       - development
-      - feature/webhooks
     paths:
       - 'src/DevSummit.UsersPermissions/**'
   pull_request:
@@ -20,9 +19,6 @@ on:
   workflow_dispatch:
 
 env:
-  PactBrokerUrl: ${{ secrets.PACT_BROKER_URL }}
-  PactBrokerUserName: ${{ secrets.PACT_BROKER_USER }}
-  PactBrokerPassword: ${{ secrets.PACT_BROKER_PWD }}
   Pacticipant: "UsersPermissions"
   Version: ${{ github.sha }} 
 

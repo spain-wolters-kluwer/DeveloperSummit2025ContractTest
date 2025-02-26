@@ -50,8 +50,7 @@ public class ProviderStateMiddleware
     {
         var user = new User
         {
-            //Id = Guid.Parse("62d7a17a-6273-4863-bc5f-2e096e81e749"),
-            Id = Guid.Parse("1950e4a1-c9e0-48a9-8d52-df9e645f8eed"),
+            Id = Guid.Parse("62d7a17a-6273-4863-bc5f-2e096e81e749"),            
             Name = "ReadOnlyUser",
             Email = "ReadOnlyUser@user.com",
             Role = UserRoles.ReadOnly

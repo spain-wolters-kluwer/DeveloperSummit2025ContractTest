@@ -1,25 +1,25 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: CD for Blog Service
+name: CD for UsersPermissions Service
 
 on:
   push:
     branches: 
       - main
-      - development      
+      - development
     paths:
-      - 'src/DevSummit.Blog/**'
+      - 'src/DevSummit.WeatherForecast/**'
   pull_request:
     branches:
       - main
       - development
     paths:
-      - 'src/DevSummit.Blog/**'
+      - 'src/DevSummit.WeatherForecast/**'
   workflow_dispatch:
 
 env:
-  Pacticipant: "Blog"
+  Pacticipant: "WeatherForecast"
   Version: ${{ github.sha }} 
 
 jobs:

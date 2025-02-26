@@ -16,6 +16,7 @@ on:
       - development
     paths:
       - 'src/DevSummit.WeatherForecast/**'
+  workflow_dispatch:
 
 env:
   TestResultsPath: src/DevSummit.Blog/TestsResults
@@ -56,10 +57,6 @@ jobs:
     - name: Test
       run: dotnet test src/DevSummit.WeatherForecast/DevSummit.WeatherForecast.Consumer.Tests/DevSummit.WeatherForecast.Consumer.Tests.csproj --configuration Release --no-restore --no-build --verbosity normal --results-directory $TestResultsPath --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
 
-    - name: Check if PR can be completed
-      run: pwsh scripts/canIcompletePR.ps1 $PactBrokerUrl "WeatherForecast" $WeatherForecastAssemblyVersion $WeatherForecastEnvironmentTag $PactBrokerUserName $PactBrokerPassword
-      shell: pwsh
-
     - name: Copy Test Results
       if: always()
       run: |
@@ -86,4 +83,9 @@ jobs:
     - name: Write to Job Summary
       if: always()  
       run: cat CodeCoverage/SummaryGithub.md >> $GITHUB_STEP_SUMMARY  
+
+    - name: Check if PR can be completed      
+      run: pwsh scripts/canIcompletePR.ps1 "$Env:PactBrokerUrl" WeatherForecast "$Env:BlogAssemblyVersion" "$Env:BlogEnvironmentTag" "$Env:PactBrokerUserName" "$Env:PactBrokerPassword"
+      shell: pwsh    
+
          
