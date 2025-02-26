@@ -60,7 +60,7 @@ jobs:
 
     - name: Check if PR can be completed
       #run: pwsh scripts/canIcompletePR.ps1 ${{ secrets.PACT_BROKER_URL }} Blog ${{ env.BlogAssemblyVersion }} ${{ env.BlogEnvironmentTag }} ${{ secrets.PACT_BROKER_USER }} ${{ secrets.PACT_BROKER_PWD }}
-      run: pwsh scripts/canIcompletePR.ps1 https://pact-broker-dev-k8s.a3software.com Blog a559d4665a17cf53e687e29ea2479a0dc56c9829 development pact-broker sqjzxsLM0oo10XxK
+      run: pwsh scripts/canIcompletePR.ps1 "$Env:PactBrokerUrl" Blog "$Env:BlogAssemblyVersion" "$Env:BlogEnvironmentTag" "$Env:PactBrokerUserName" "$Env:PactBrokerPassword"
       shell: pwsh
       
     - name: Copy Test Results
