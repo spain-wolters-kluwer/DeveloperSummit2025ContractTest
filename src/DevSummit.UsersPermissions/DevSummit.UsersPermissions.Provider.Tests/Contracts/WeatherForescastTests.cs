@@ -28,11 +28,7 @@ public class WeatherForescastTests
     [Fact]
     public void EnsureUsersPermissionsApiHonoursWithWeatherForecast()
     {
-        using var pactVerifier = new PactVerifier("UsersPermissions", _pactConfig);
-        pactVerifier.WithHttpEndpoint(new Uri(_fixture.Url))
-            .WithFileSource(new FileInfo(pactPath))
-            .WithProviderStateUrl(new Uri(_fixture.Url + "/provider-states"))
-            .Verify();
+       Assert.Fail("Not implemented");
     }
 
 }

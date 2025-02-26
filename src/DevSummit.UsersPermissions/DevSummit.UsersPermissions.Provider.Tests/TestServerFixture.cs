@@ -19,8 +19,7 @@ public class TestServerFixture : IDisposable
 
         _app = builder.Build();
         HostConfiguration.ConfigureApp(_app);
-        _app.Urls.Add(Url);
-        _app.UseProviderStateMiddleware();
+        _app.Urls.Add(Url);        
         _app.StartAsync().GetAwaiter().GetResult();
     }
 

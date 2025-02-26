@@ -23,13 +23,7 @@ public class ProviderStateMiddleware
     {
         _next = next;
         _usersRepository = usersRepository;
-        _providerStates = new Dictionary<string, Func<IDictionary<string, object>, Task>>
-        {
-
-            ["User with access"] = InsertUserWithAccess,
-            ["User without access"] = InsertUserWithoutAccess,
-            ["Not existing User"] = InsertNoUser
-        };
+       
     }
 
     private async Task InsertUserWithAccess(IDictionary<string, object> parameters)
