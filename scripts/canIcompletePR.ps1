@@ -11,6 +11,9 @@ param (
 
 $url = "$pactUrl/can-i-deploy?pacticipant=$consumer&version=$version&to=$tag"
 
+Write-Output "Checking if $consumer version $version can be deployed to $tag"
+Where-Object "Url to check: $url"
+
 $headers = @{
     "Content-Type" = "application/json"
     "Accept" = "application/hal+json, application/json, */*; q=0.01"
