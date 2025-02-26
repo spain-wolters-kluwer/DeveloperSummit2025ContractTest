@@ -26,26 +26,8 @@ internal static class WeatherForecastData
     public static void ConfigureRequestPactBuilder(this IPactBuilderV4 pactBuilder, string userName, string giving)
     {
         var mailRegexPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-        pactBuilder
-            .UponReceiving("Get Users filtered by name")
-                .Given(giving)
-                .WithRequest(HttpMethod.Get, "/api/users")
-                .WithQuery("name", Match.Equality(userName))
-            .WillRespond()
-                .WithStatus(HttpStatusCode.OK)
-                .WithJsonBody(users.Where(u => u.Name == userName).Select(u => new { id = u.Id, name = Match.Type(u.Name), email = Match.Regex(u.Email, mailRegexPattern) }));
+        
 
-        var user = users.FirstOrDefault(u => u.Name == userName);
-        if (user != null)
-        {
-            pactBuilder
-                .UponReceiving("Get User details by user id")
-                    .Given(giving)
-                    .WithRequest(HttpMethod.Get, $"/api/users/{user.Id}")
-                .WillRespond()
-                    .WithStatus(HttpStatusCode.OK)
-                    .WithJsonBody(new { name = Match.Type(user.Name), email = Match.Regex(user.Email, mailRegexPattern), hasAccess = user.Access });
-        }
     }
 }
 

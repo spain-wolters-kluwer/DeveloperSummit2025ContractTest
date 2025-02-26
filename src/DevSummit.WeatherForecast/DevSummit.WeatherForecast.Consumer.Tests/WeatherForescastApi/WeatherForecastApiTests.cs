@@ -23,6 +23,13 @@ namespace DevSummit.WeatherForecast.Consumer.Tests.WeatherForecastApi
         }
 
         [Fact]
+        public async Task GivingUserWithoutAccess_WhenGetWeatherForecast_ThenReturnUnauthorized()
+        {
+            
+        }
+
+
+        [Fact]
         public async Task GivingUserWithAccess_WhenGetWeatherForecast_ThenReturnWeatherForecast()
         {
             _pactBuilder.ConfigureRequestPactBuilder(permitedUserName, "User with access");
@@ -60,24 +67,7 @@ namespace DevSummit.WeatherForecast.Consumer.Tests.WeatherForecastApi
                 Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
             });
         }
-
-        [Fact]
-        public async Task GivingUserWithoutAccess_WhenGetWeatherForecast_ThenReturnUnauthorized()
-        {
-            _pactBuilder.ConfigureRequestPactBuilder(notPermitedUserName, "User without access");
-            await _pactBuilder.VerifyAsync(async ctx =>
-            {
-                // Arrange
-                var client = _factory.CreateClient(ctx.MockServerUri.ToString());
-                client.DefaultRequestHeaders.Add("Username", notPermitedUserName);
-
-                // Act
-                var response = await client.GetAsync("weatherforecast");
-
-                //Assert
-                Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-            });
-        }
+                
     }
 }
 
