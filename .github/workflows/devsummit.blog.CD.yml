@@ -1,0 +1,89 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: CD for Blog Service
+
+on:
+  push:
+    branches: 
+      - main
+      - development
+      - feature/webhooks
+    paths:
+      - 'src/DevSummit.Blog/**'
+  pull_request:
+    branches:
+      - main
+      - development
+    paths:
+      - 'src/DevSummit.Blog/**'
+  workflow_dispatch:
+
+env:
+  PactBrokerUrl: ${{ secrets.PACT_BROKER_URL }}
+  PactBrokerUserName: ${{ secrets.PACT_BROKER_USER }}
+  PactBrokerPassword: ${{ secrets.PACT_BROKER_PWD }}
+  Pacticipant: "Blog"
+  Version: ${{ github.sha }} 
+
+jobs:
+  deployment_development:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check if I can deploy to Development
+      run: pwsh scripts/canIdeploy.ps1 $PactBrokerUrl $Pacticipant $Version $PactBrokerUserName $PactBrokerPassword
+      shell: pwsh
+    
+    - name: Deploy to Development
+      run: pwsh scripts/deployVersionToEnvironment.ps1 $PactBrokerUrl $Pacticipant $Version development $PactBrokerUserName $PactBrokerPassword
+      shell: pwsh
+
+  deployment_QA:
+    runs-on: ubuntu-latest
+    environment: QA
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check if I can deploy to QA
+      run: pwsh scripts/canIdeploy.ps1 $PactBrokerUrl $Pacticipant $Version $PactBrokerUserName $PactBrokerPassword
+      shell: pwsh
+    
+    - name: Deploy to QA
+      run: pwsh scripts/deployVersionToEnvironment.ps1 $PactBrokerUrl $Pacticipant $Version test $PactBrokerUserName $PactBrokerPassword
+      shell: pwsh
+
+  deployment_preproduction:
+    runs-on: ubuntu-latest
+    environment: preproduction
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check if I can deploy to preproduction
+      run: pwsh scripts/canIdeploy.ps1 $PactBrokerUrl $Pacticipant $Version $PactBrokerUserName $PactBrokerPassword
+      shell: pwsh
+    
+    - name: Deploy to preproduction
+      run: pwsh scripts/deployVersionToEnvironment.ps1 $PactBrokerUrl $Pacticipant $Version preproduction $PactBrokerUserName $PactBrokerPassword
+      shell: pwsh
+
+
+  deployment_production:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check if I can deploy to Production
+      run: pwsh scripts/canIdeploy.ps1 $PactBrokerUrl $Pacticipant $Version $PactBrokerUserName $PactBrokerPassword
+      shell: pwsh
+    
+    - name: Deploy to Production
+      run: pwsh scripts/deployVersionToEnvironment.ps1 $PactBrokerUrl $Pacticipant $Version production $PactBrokerUserName $PactBrokerPassword
+      shell: pwsh

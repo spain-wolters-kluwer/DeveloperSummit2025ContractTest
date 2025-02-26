@@ -17,6 +17,10 @@ on:
       - development
     paths:
       - 'src/DevSummit.UsersPermissions/**'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [contract_requiring_verification_published]
+
 
 env:
   TestResultsPath: src/DevSummit.Blog/TestsResults
@@ -27,13 +31,7 @@ env:
   UsersPermissionsAssemblyVersion: ${{ github.sha }}
   UsersPermissionsPipelineUrl: ${{ github.event.pull_request.html_url }}
   UsersPermissionsEnvironmentTag: development
-  PactDir: src/DevSummit.UsersPermissions/pacts
-
-permissions:
-  contents: read
-  issues: read
-  checks: write
-  pull-requests: write
+  
 
 jobs:
   build:
