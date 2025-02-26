@@ -20,7 +20,6 @@ on:
   repository_dispatch:
     types: [contract_requiring_verification_published]
 
-
 env:
   TestResultsPath: src/DevSummit.Blog/TestsResults
   PactBrokerUrl: ${{ secrets.PACT_BROKER_URL }}
