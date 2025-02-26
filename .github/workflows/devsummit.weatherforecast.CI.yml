@@ -16,6 +16,7 @@ on:
       - development
     paths:
       - 'src/DevSummit.WeatherForecast/**'
+  workflow_dispatch:
 
 env:
   TestResultsPath: src/DevSummit.Blog/TestsResults
@@ -82,4 +83,9 @@ jobs:
     - name: Write to Job Summary
       if: always()  
       run: cat CodeCoverage/SummaryGithub.md >> $GITHUB_STEP_SUMMARY  
+
+    - name: Check if PR can be completed      
+      run: pwsh scripts/canIcompletePR.ps1 "$Env:PactBrokerUrl" WeatherForecast "$Env:BlogAssemblyVersion" "$Env:BlogEnvironmentTag" "$Env:PactBrokerUserName" "$Env:PactBrokerPassword"
+      shell: pwsh    
+
          

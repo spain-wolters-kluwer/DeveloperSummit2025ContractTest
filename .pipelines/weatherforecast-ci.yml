@@ -72,3 +72,10 @@ stages:
         sdkVersion: '$(netCoreVersion)'
         arguments: '-c $(BuildConfiguration) --no-build --no-restore --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=opencover'
         testRunTitle: '$(prefix) Consumer Contract Test'
+
+    - task: PowerShell@2
+      displayName: 'Wait until the Provider is Verified'
+      inputs:
+        filePath: '$(Build.SourcesDirectory)/Tools/canIcompletePR.ps1'
+        arguments: $(PactBrokerUrl) "WeatherForecast" $(WeatherForecastAssemblyVersion) $(WeatherForecastEnvironmentTag) $(PactBrokerUserName) $(PactBrokerPassword)
+        failOnStderr: true

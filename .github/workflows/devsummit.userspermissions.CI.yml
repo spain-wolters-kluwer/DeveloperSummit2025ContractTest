@@ -7,8 +7,7 @@ on:
   push:
     branches: 
       - main
-      - development
-      - feature/*
+      - development      
     paths:
       - 'src/DevSummit.UsersPermissions/**'
   pull_request:
@@ -30,13 +29,7 @@ env:
   UsersPermissionsAssemblyVersion: ${{ github.sha }}
   UsersPermissionsPipelineUrl: ${{ github.event.pull_request.html_url }}
   UsersPermissionsEnvironmentTag: development
-  PactDir: src/DevSummit.UsersPermissions/pacts
-
-permissions:
-  contents: read
-  issues: read
-  checks: write
-  pull-requests: write
+  
 
 jobs:
   build:

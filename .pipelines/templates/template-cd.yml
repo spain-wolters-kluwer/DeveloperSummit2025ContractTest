@@ -1,0 +1,66 @@
+parameters:
+  - name: PactBrokerUrl
+    type: string
+    default: ''
+
+  - name: Pacticipant
+    type: string
+    default: ''
+
+  - name: Version
+    type: string
+    default: ''
+
+  - name: Environment
+    type: string
+    default: 'development'
+    values:
+      - 'development'
+      - 'si'
+      - 'preproduction'
+      - 'production' 
+
+  - name: PactBrokerUserName
+    type: string
+    default: ''
+
+  - name: PactBrokerPassword
+    type: string
+    default: ''
+
+  - name: Promotion
+    type: string
+    default: '' 
+
+  - name: dependsOn
+    type: object
+    default: [] 
+
+stages:
+  - stage: ${{ parameters.Environment }}
+    displayName: Deploy_${{ parameters.Pacticipant }}_in_${{ parameters.Environment }}
+    dependsOn: ${{ parameters.dependsOn }}
+    jobs:
+      - deployment: Validation
+        environment: '${{ parameters.Environment }}'
+        
+      - job: Deploy
+        displayName: 'Deploy to ${{ parameters.Environment }}'
+        
+        steps:
+          - checkout: self
+
+          - task: PowerShell@2
+            displayName: 'Can I Deploy?'
+            inputs:
+              filePath: '$(Build.SourcesDirectory)/Tools/canIdDeploy.ps1'
+              arguments: ${{ parameters.PactBrokerUrl }} ${{ parameters.Pacticipant }} ${{ parameters.Version }} ${{ parameters.Environment }} ${{ parameters.PactBrokerUserName }} ${{ parameters.PactBrokerPassword }}
+              failOnStderr: true
+
+# Deployment tasks
+          - task: PowerShell@2
+            displayName: 'Publish Deployed Version to Environment'
+            inputs:
+              filePath: '$(Build.SourcesDirectory)/Tools/deployVersionToEnvironment.ps1'
+              arguments: ${{ parameters.PactBrokerUrl }} ${{ parameters.Pacticipant }} ${{ parameters.Version }} ${{ parameters.Environment }} ${{ parameters.PactBrokerUserName }} ${{ parameters.PactBrokerPassword }}
+              failOnStderr: true

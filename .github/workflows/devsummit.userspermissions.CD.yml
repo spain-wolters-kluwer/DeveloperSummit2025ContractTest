@@ -1,0 +1,85 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: CD for UsersPermissions Service
+
+on:
+  push:
+    branches: 
+      - main
+      - development
+    paths:
+      - 'src/DevSummit.UsersPermissions/**'
+  pull_request:
+    branches:
+      - main
+      - development
+    paths:
+      - 'src/DevSummit.UsersPermissions/**'
+  workflow_dispatch:
+
+env:
+  Pacticipant: "UsersPermissions"
+  Version: ${{ github.sha }} 
+
+jobs:
+  deployment_development:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check if I can deploy to Development
+      run: pwsh scripts/canIdeploy.ps1 ${{ secrets.PACT_BROKER_URL }} ${{ env.Pacticipant }} ${{ env.Version }} development ${{ secrets.PACT_BROKER_USER }} ${{ secrets.PACT_BROKER_PWD }}
+      shell: pwsh
+    
+    - name: Deploy to Development
+      run: pwsh scripts/deployVersionToEnvironment.ps1 ${{ secrets.PACT_BROKER_URL }} ${{ env.Pacticipant }} ${{ env.Version }} development ${{ secrets.PACT_BROKER_USER }} ${{ secrets.PACT_BROKER_PWD }}
+      shell: pwsh
+
+  deployment_QA:
+    runs-on: ubuntu-latest
+    environment: QA
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check if I can deploy to QA
+      run: pwsh scripts/canIdeploy.ps1 ${{ secrets.PACT_BROKER_URL }} ${{ env.Pacticipant }} ${{ env.Version }} test ${{ secrets.PACT_BROKER_USER }} ${{ secrets.PACT_BROKER_PWD }}
+      shell: pwsh
+    
+    - name: Deploy to QA
+      run: pwsh scripts/deployVersionToEnvironment.ps1 ${{ secrets.PACT_BROKER_URL }} ${{ env.Pacticipant }} ${{ env.Version }} test ${{ secrets.PACT_BROKER_USER }} ${{ secrets.PACT_BROKER_PWD }}
+      shell: pwsh
+
+  deployment_preproduction:
+    runs-on: ubuntu-latest
+    environment: preproduction
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check if I can deploy to preproduction
+      run: pwsh scripts/canIdeploy.ps1 ${{ secrets.PACT_BROKER_URL }} ${{ env.Pacticipant }} ${{ env.Version }} preproduction ${{ secrets.PACT_BROKER_USER }} ${{ secrets.PACT_BROKER_PWD }}
+      shell: pwsh
+    
+    - name: Deploy to preproduction
+      run: pwsh scripts/deployVersionToEnvironment.ps1 ${{ secrets.PACT_BROKER_URL }} ${{ env.Pacticipant }} ${{ env.Version }} preproduction ${{ secrets.PACT_BROKER_USER }} ${{ secrets.PACT_BROKER_PWD }}
+      shell: pwsh
+
+
+  deployment_production:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check if I can deploy to Production
+      run: pwsh scripts/canIdeploy.ps1 ${{ secrets.PACT_BROKER_URL }} ${{ env.Pacticipant }} ${{ env.Version }} production ${{ secrets.PACT_BROKER_USER }} ${{ secrets.PACT_BROKER_PWD }}
+      shell: pwsh
+    
+    - name: Deploy to Production
+      run: pwsh scripts/deployVersionToEnvironment.ps1 ${{ secrets.PACT_BROKER_URL }} ${{ env.Pacticipant }} ${{ env.Version }} production ${{ secrets.PACT_BROKER_USER }} ${{ secrets.PACT_BROKER_PWD }}
+      shell: pwsh
