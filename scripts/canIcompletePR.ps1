@@ -9,7 +9,7 @@ param (
     [int]$interval=5
 )
 
-$url = "$pactUrl/can-i-deploy?pacticipant=$consumer&version=$version&to=$tag"
+$url = $pactUrl + "can-i-deploy?pacticipant=$consumer&version=$version&to=$tag"
 
 Write-Output "Checking if $consumer version $version can be deployed to $tag"
 
