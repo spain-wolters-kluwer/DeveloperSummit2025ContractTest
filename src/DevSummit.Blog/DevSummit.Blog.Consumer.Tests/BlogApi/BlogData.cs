@@ -22,6 +22,7 @@ internal static class BlogData
             Name = "FullAccessUser",
             Email = "FullAccessUser@user.com",
             Role = UserRoles.FullAccess
+
         },
         new User
         {
